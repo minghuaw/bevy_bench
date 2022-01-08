@@ -124,10 +124,10 @@ fn main() {
         dur
     };
 
-    //use std::time::Duration;
-    //let total: Duration = (0..5).map(|_| do_run()).sum();
-    //println!("Total loop time: {:?}", total);
-    //println!("Avg loop time: {:?}", total / 5)
+    use std::time::Duration;
+    let total: Duration = (0..5).map(|_| do_run()).sum();
+    println!("Total loop time: {:?}", total);
+    println!("Avg loop time: {:?}", total / 5)
 
-    println!("Loop time: {:?}", do_run());
+    // println!("Loop time: {:?}", do_run());
 }
