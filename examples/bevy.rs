@@ -4,18 +4,26 @@
 
 extern crate bevy_bench as lib;
 
-use bevy_ecs::prelude::*;
+use bevy_ecs::{prelude::*};
 use bevy_tasks::{ComputeTaskPool, TaskPoolBuilder};
 use lib::{PARTICLE_NUMBER, STEP_NUMBER};
 
 extern crate nalgebra;
 use nalgebra::Vector3;
 
+#[derive(Component)]
 pub struct Position(Vector3<f64>);
+
+#[derive(Component)]
 pub struct Velocity(Vector3<f64>);
-#[derive(Copy, Clone)]
+
+#[derive(Copy, Clone, Component)]
 pub struct Force(Vector3<f64>);
+
+#[derive(Component)]
 pub struct OldForce(Force);
+
+#[derive(Component)]
 pub struct Mass(f64);
 
 pub struct Timestep {
@@ -97,18 +105,15 @@ fn main() {
     stage
         .add_system(
             integrate_position
-                .system()
                 .label(SystemLabels::IntegratePosition),
         )
         .add_system(
             harmonic_trap
-                .system()
                 .label(SystemLabels::HarmonicTrap)
                 .after(SystemLabels::IntegratePosition),
         )
         .add_system(
             integrate_velocity
-                .system()
                 .label(SystemLabels::IntegrateVelocity)
                 .after(SystemLabels::HarmonicTrap),
         );
@@ -124,10 +129,10 @@ fn main() {
         dur
     };
 
-    //use std::time::Duration;
-    //let total: Duration = (0..5).map(|_| do_run()).sum();
-    //println!("Total loop time: {:?}", total);
-    //println!("Avg loop time: {:?}", total / 5)
+    use std::time::Duration;
+    let total: Duration = (0..5).map(|_| do_run()).sum();
+    println!("Total loop time: {:?}", total);
+    println!("Avg loop time: {:?}", total / 5);
 
-    println!("Loop time: {:?}", do_run());
+    // println!("Loop time: {:?}", do_run());
 }

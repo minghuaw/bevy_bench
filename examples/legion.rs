@@ -3,6 +3,8 @@
 //! Performs a velocity-verlet integration of particles in a harmonic trap.
 
 extern crate bevy_bench as lib;
+use std::time::Duration;
+
 use lib::{PARTICLE_NUMBER, STEP_NUMBER};
 
 extern crate legion;
@@ -88,9 +90,23 @@ fn main() {
         ));
     }
 
-    println!("Starting simulation.");
-    for _ in 0..STEP_NUMBER {
-        schedule.execute(&mut world, &mut resources);
-    }
-    println!("Finished!");
+    // println!("Starting simulation.");
+    // for _ in 0..STEP_NUMBER {
+    //     schedule.execute(&mut world, &mut resources);
+    // }
+    // println!("Finished!");
+    let mut do_run = || {
+        println!("Starting simulation.");
+        let start = std::time::Instant::now();
+        for _ in 0..STEP_NUMBER {
+            schedule.execute(&mut world, &mut resources);
+        }
+        let dur = std::time::Instant::now() - start;
+        println!("Finished in {:?}", dur);
+        dur
+    };
+
+    let total: Duration = (0..5).map(|_| do_run()).sum();
+    println!("Total time: {:?}", total);
+    println!("Avg: {:?}", total / 5)
 }
